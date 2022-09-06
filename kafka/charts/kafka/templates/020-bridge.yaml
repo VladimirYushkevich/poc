@@ -1,0 +1,11 @@
+{{- $values := .Values }}
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaBridge
+metadata:
+  name: {{$values.bridge.name}}
+spec:
+  replicas: {{$values.bridge.replicas}}
+  bootstrapServers: {{$values.cluster.name}}-kafka-bootstrap:{{$values.kafka.port}}
+  http:
+    port: {{$values.bridge.http.port}}

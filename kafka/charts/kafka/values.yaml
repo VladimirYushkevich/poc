@@ -1,0 +1,24 @@
+cluster:
+  name: my-kafka-cluster
+  namespace: kafka
+
+kafka:
+  port: 9092
+  version: 3.2.0
+  config:
+    inter:
+      broker:
+        protocol:
+          version: "3.2"
+
+bridge:
+  name: my-kafka-bridge
+  externalName: my-kafka-bridge-external-service
+  ingress:
+    name: my-kafka-bridge-ingress
+  http:
+    port: 8081
+
+topics:
+  keyMouseEvent:
+    name: key-mouse-event

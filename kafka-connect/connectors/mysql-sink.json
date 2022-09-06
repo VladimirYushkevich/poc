@@ -1,0 +1,19 @@
+{
+  "name": "mysql-sink",
+  "config": {
+    "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
+    "connection.url": "jdbc:mysql://mysqldb:3306/my_db",
+    "connection.user": "user",
+    "connection.password": "pass",
+    "topics": "mysql-data",
+    "table.name.format": "data_changelog",
+    "insert.mode": "upsert",
+    "pk.mode":"record_value",
+    "pk.fields":"data_id",
+    "transforms": "DropField,RenameField",
+    "transforms.DropField.type": "org.apache.kafka.connect.transforms.ReplaceField$Value",
+    "transforms.DropField.blacklist": "timestampOne,timestampTwo",
+    "transforms.RenameField.type": "org.apache.kafka.connect.transforms.ReplaceField$Value",
+    "transforms.RenameField.renames": "id:data_id"
+  }
+}

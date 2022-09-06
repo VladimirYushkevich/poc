@@ -1,0 +1,15 @@
+{
+  "name": "mysql-source",
+  "config": {
+    "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
+    "connection.url": "jdbc:mysql://mysqldb:3306/my_db",
+    "connection.user": "user",
+    "connection.password": "pass",
+    "topic.prefix": "mysql-",
+    "mode":"timestamp+incrementing",
+    "incrementing.column.name": "id",
+    "timestamp.column.name": "updatedAt",
+    "poll.interval.ms" : 1000,
+    "table.whitelist" : "data"
+  }
+}

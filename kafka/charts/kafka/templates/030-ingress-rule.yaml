@@ -1,0 +1,24 @@
+{{- $values := .Values }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{$values.bridge.ingress.name}}
+  {{- if $values.bridge.ingress.annotations }}
+  annotations:
+    {{- with $values.bridge.ingress.annotations  }} 
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  rules:
+    - host: {{$values.bridge.rules.host}}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{$values.bridge.externalName}}
+                port:
+                  number: {{$values.bridge.http.port}}

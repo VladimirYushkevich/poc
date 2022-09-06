@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "data-etl"
+version = "0.1.0"
+description = "ETL scripts"
+authors = ["Uladzimir Yushkevich <yushkevich.vladimir@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+google-oauth = "^1.0.0"
+oauth2client = "^4.1.3"
+yaml2 = "^0.0.1"
+mysql-connector = "^2.2.9"
+pandas = "^1.4.2"
+gspread = "^5.3.2"
+datetime2 = "^0.7.5"
+numpy = "^1.22.3"
+simple-salesforce = "^1.11.6"
+google-cloud = "^0.34.0"
+google = "^3.0.0"
+bigquery = "^0.0.20"
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.1.2"
+flake8 = "^4.0.1"
+black = "^22.3.0"
+pylint = "^2.13.8"
+pre-commit = "^2.18.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

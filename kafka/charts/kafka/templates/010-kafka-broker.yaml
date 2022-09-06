@@ -1,0 +1,88 @@
+{{- $values := .Values }}
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: {{$values.cluster.name}}
+spec:
+  kafka:
+    replicas: {{$values.kafka.replicas}}
+    version: {{$values.kafka.version}}
+    logging:
+      type: inline
+      loggers:
+        kafka.root.logger.level: "INFO"
+    resources:
+      requests:
+        memory: {{$values.kafka.requests.memory}}
+        cpu: {{$values.kafka.requests.cpu}}
+      limits:
+        memory: {{$values.kafka.limits.memory}}
+        cpu: {{$values.kafka.limits.cpu}}
+    readinessProbe:
+      initialDelaySeconds: 15
+      timeoutSeconds: 5
+    livenessProbe:
+      initialDelaySeconds: 15
+      timeoutSeconds: 5
+    jvmOptions:
+      -Xms: {{$values.kafka.jvmOptions.xms}}
+      -Xmx: {{$values.kafka.jvmOptions.xmx}}
+    listeners:
+      - name: plain
+        port: {{$values.kafka.port}}
+        type: internal
+        tls: false
+    storage:
+      type: persistent-claim
+      size: {{$values.kafka.storage.size}}
+    config:
+      auto.create.topics.enable: "false"
+      offsets.topic.replication.factor: {{$values.kafka.config.offsets.topic.replication.factor}}
+      transaction.state.log.replication.factor: {{$values.kafka.config.transaction.state.log.replication.factor}}
+      transaction.state.log.min.isr: {{$values.kafka.config.transaction.state.log.min.isr}}
+      default.replication.factor: {{$values.kafka.config.default.replication.factor}}
+      min.insync.replicas: {{$values.kafka.config.min.insync.replicas}}
+      inter.broker.protocol.version: {{$values.kafka.config.inter.broker.protocol.version}}
+  zookeeper:
+    replicas: {{$values.zookeeper.replicas}}
+    resources:
+      requests:
+        memory: {{$values.zookeeper.resources.requests.memory}}
+        cpu: {{$values.zookeeper.resources.requests.cpu}}
+      limits:
+        memory: {{$values.zookeeper.resources.limits.memory}}
+        cpu: {{$values.zookeeper.resources.limits.cpu}}
+    storage:
+      type: persistent-claim
+      size: {{$values.zookeeper.storage.size}}
+      deleteClaim: false
+  entityOperator:
+    topicOperator:
+      watchedNamespace: {{$values.cluster.namespace}}
+      reconciliationIntervalSeconds: 60
+      logging:
+        type: inline
+        loggers:
+          rootLogger.level: INFO
+      resources:
+        requests:
+          memory: {{$values.entityOperator.topicOperator.resources.requests.memory}}
+          cpu: {{$values.entityOperator.topicOperator.resources.requests.cpu}}
+        limits:
+          memory: {{$values.entityOperator.topicOperator.resources.limits.memory}}
+          cpu: {{$values.entityOperator.topicOperator.resources.limits.cpu}}
+    userOperator:
+      watchedNamespace: {{$values.cluster.namespace}}
+      reconciliationIntervalSeconds: 60
+      logging:
+        type: inline
+        loggers:
+          rootLogger.level: INFO
+      resources:
+        requests:
+          memory: {{$values.entityOperator.userOperator.resources.requests.memory}}
+          cpu: {{$values.entityOperator.userOperator.resources.requests.cpu}}
+        limits:
+          memory: {{$values.entityOperator.userOperator.resources.limits.memory}}
+          cpu: {{$values.entityOperator.userOperator.resources.limits.cpu}}

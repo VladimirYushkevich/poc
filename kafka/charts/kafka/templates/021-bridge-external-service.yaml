@@ -1,0 +1,14 @@
+{{- $values := .Values }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{$values.bridge.externalName}}
+spec:
+  selector:
+    strimzi.io/cluster: {{$values.bridge.name}}
+    strimzi.io/kind: KafkaBridge
+    strimzi.io/name: {{$values.bridge.name}}-bridge
+  ports:
+    - port: {{$values.bridge.http.port}}
+  type: NodePort

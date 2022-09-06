@@ -1,0 +1,15 @@
+{{- $values := .Values }}
+
+{{- range $topic := .Values.topics }}
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: {{$topic.name}}
+  labels:
+    strimzi.io/cluster: {{$values.cluster.name}}
+    name: {{$topic.name}}
+spec:
+  partitions: {{$topic.partitions}}
+  replicas: {{$topic.replicas}}
+{{- end }}
