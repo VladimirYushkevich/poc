@@ -1,4 +1,4 @@
-### Proof of Concept for kafka connect
+### Kafka Connect
 
 ## Start
 
