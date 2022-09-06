@@ -1,4 +1,4 @@
-### Kafka Connect
+# Kafka Connect
 
 ## Start
 
