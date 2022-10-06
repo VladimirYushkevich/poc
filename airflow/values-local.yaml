@@ -1,0 +1,67 @@
+# Default airflow tag to deploy
+defaultAirflowTag: "2.4.1"
+
+# Airflow version (Used to make some decisions based on Airflow Version being deployed)
+airflowVersion: "2.4.1"
+
+# Supply the worker configs
+workers:
+  replicas: 1
+  resources:
+    requests:
+      cpu: "500m"
+      memory: "1Gi"
+  podAnnotations:
+    # So that traffic to the cloudsqlproxy is off-mesh
+    traffic.sidecar.istio.io/excludeOutboundPorts: "5432"
+#  labels:
+#    sidecar.istio.io/inject: "true"
+  extraVolumeMounts:
+    - name: dags-gcs-dir
+      mountPath: /opt/airflow/dags/users_dags
+  extraVolumes:
+    - name: dags-gcs-dir
+      emptyDir: { }
+  extraContainers:
+    - name: gcs-sync
+      image: hello-world
+      imagePullPolicy: Always
+      securityContext:
+        runAsUser: 999
+        runAsGroup: 999
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+#      volumeMounts:
+#        - name: dags-gcs-dir
+#          mountPath: /home/airflow/gcs/dags
+#      args:
+#        - /home/airflow/gcs
+      env:
+        - name: GCS_BUCKET
+          value: airflow
+      resources:
+        limits:
+          cpu: 1000m
+          memory: 1000Mi
+        requests:
+          cpu: 1000m
+          memory: 500Mi
+
+"airflow":
+  airflowVersion: "2.4.1"
+
+  # Custom GCS sync that syncs DAGs from GCS bucket into Airflow pods
+  gcsSync:
+    enabled: true
+    containerName: gcs-sync
+    images:
+      repository: gcr.io/dremio-1093/dremio-daas-optimizationservice-gcs-sync
+      pullPolicy: Always
+    gcsBucketName: airflow
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 1000Mi
+      requests:
+        cpu: 1000m
+        memory: 500Mi
